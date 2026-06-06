@@ -32,6 +32,7 @@ train_soundscapes/ ─┘                        (Phase 1, Kaggle GPU)          
 4. **Pseudo-labeling** — 用 5-fold teacher 對 ~127k 未標記 soundscape 生成 soft labels
 5. **Temporal Smoothing** — 推論時相鄰 segment 預測平均
 6. **Soundscape Dedup** — 修正官方標籤的 2x 重複問題 (1478 → 739)
+7. **外部資料擴增** — iNaturalist、Xeno-canto、AnuraSet 額外音檔提取 Perch embeddings 加入訓練
 
 ### LB 提升歷程
 
