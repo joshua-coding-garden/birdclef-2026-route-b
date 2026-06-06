@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 480">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#94A3B8"/>
+    </marker>
+  </defs>
+  <style>text{font-family:"Microsoft JhengHei","PingFang TC",sans-serif}</style>
+
+  <text x="600" y="42" text-anchor="middle" font-size="30" font-weight="bold" fill="#1E293B">推論流程（Phase 3）</text>
+
+  <!-- Step 1: Test audio -->
+  <rect x="30" y="80" width="180" height="100" rx="14" fill="#334155"/>
+  <text x="120" y="123" text-anchor="middle" font-size="22" font-weight="bold" fill="white">測試音訊</text>
+  <text x="120" y="155" text-anchor="middle" font-size="20" fill="white" fill-opacity="0.7">60 秒 .ogg</text>
+
+  <!-- Arrow -->
+  <line x1="220" y1="130" x2="260" y2="130" stroke="#94A3B8" stroke-width="3" marker-end="url(#arr)"/>
+
+  <!-- Step 2: Framing -->
+  <rect x="270" y="80" width="180" height="100" rx="14" fill="#2563EB"/>
+  <text x="360" y="123" text-anchor="middle" font-size="22" font-weight="bold" fill="white">5 秒分帧</text>
+  <text x="360" y="155" text-anchor="middle" font-size="20" fill="white" fill-opacity="0.7">→ 12 個片段</text>
+
+  <!-- Arrow -->
+  <line x1="460" y1="130" x2="500" y2="130" stroke="#94A3B8" stroke-width="3" marker-end="url(#arr)"/>
+
+  <!-- Step 3: Perch -->
+  <rect x="510" y="80" width="200" height="100" rx="14" fill="#059669"/>
+  <text x="610" y="118" text-anchor="middle" font-size="22" font-weight="bold" fill="white">Perch v2</text>
+  <text x="610" y="150" text-anchor="middle" font-size="20" fill="white" fill-opacity="0.7">CPU 編碼器</text>
+
+  <!-- Arrow down to fan-out -->
+  <line x1="610" y1="190" x2="610" y2="230" stroke="#94A3B8" stroke-width="3" marker-end="url(#arr)"/>
+
+  <!-- 5 MLP Heads fan-out -->
+  <rect x="120" y="245" width="160" height="70" rx="10" fill="#7C3AED"/>
+  <text x="200" y="287" text-anchor="middle" font-size="20" font-weight="bold" fill="white">MLP Fold 0</text>
+
+  <rect x="310" y="245" width="160" height="70" rx="10" fill="#7C3AED"/>
+  <text x="390" y="287" text-anchor="middle" font-size="20" font-weight="bold" fill="white">MLP Fold 1</text>
+
+  <rect x="500" y="245" width="160" height="70" rx="10" fill="#7C3AED"/>
+  <text x="580" y="287" text-anchor="middle" font-size="20" font-weight="bold" fill="white">MLP Fold 2</text>
+
+  <rect x="690" y="245" width="160" height="70" rx="10" fill="#7C3AED"/>
+  <text x="770" y="287" text-anchor="middle" font-size="20" font-weight="bold" fill="white">MLP Fold 3</text>
+
+  <rect x="880" y="245" width="160" height="70" rx="10" fill="#7C3AED"/>
+  <text x="960" y="287" text-anchor="middle" font-size="20" font-weight="bold" fill="white">MLP Fold 4</text>
+
+  <!-- Fan-out lines from Perch to each head -->
+  <line x1="610" y1="230" x2="200" y2="245" stroke="#94A3B8" stroke-width="1.5"/>
+  <line x1="610" y1="230" x2="390" y2="245" stroke="#94A3B8" stroke-width="1.5"/>
+  <line x1="610" y1="230" x2="580" y2="245" stroke="#94A3B8" stroke-width="1.5"/>
+  <line x1="610" y1="230" x2="770" y2="245" stroke="#94A3B8" stroke-width="1.5"/>
+  <line x1="610" y1="230" x2="960" y2="245" stroke="#94A3B8" stroke-width="1.5"/>
+
+  <!-- Converge lines -->
+  <line x1="200" y1="315" x2="480" y2="370" stroke="#94A3B8" stroke-width="1.5"/>
+  <line x1="390" y1="315" x2="480" y2="370" stroke="#94A3B8" stroke-width="1.5"/>
+  <line x1="580" y1="315" x2="530" y2="370" stroke="#94A3B8" stroke-width="1.5"/>
+  <line x1="770" y1="315" x2="570" y2="370" stroke="#94A3B8" stroke-width="1.5"/>
+  <line x1="960" y1="315" x2="600" y2="370" stroke="#94A3B8" stroke-width="1.5"/>
+
+  <!-- Average -->
+  <rect x="440" y="370" width="200" height="70" rx="14" fill="#D97706"/>
+  <text x="540" y="400" text-anchor="middle" font-size="22" font-weight="bold" fill="white">平均預測</text>
+  <text x="540" y="428" text-anchor="middle" font-size="18" fill="white" fill-opacity="0.7">÷ 5</text>
+
+  <!-- Arrow -->
+  <line x1="650" y1="405" x2="720" y2="405" stroke="#94A3B8" stroke-width="3" marker-end="url(#arr)"/>
+
+  <!-- Temporal smoothing -->
+  <rect x="730" y="370" width="210" height="70" rx="14" fill="#DC2626"/>
+  <text x="835" y="400" text-anchor="middle" font-size="22" font-weight="bold" fill="white">時序平滑</text>
+  <text x="835" y="428" text-anchor="middle" font-size="18" fill="white" fill-opacity="0.7">相鄰段平均</text>
+
+  <!-- Arrow -->
+  <line x1="950" y1="405" x2="1010" y2="405" stroke="#94A3B8" stroke-width="3" marker-end="url(#arr)"/>
+
+  <!-- Output -->
+  <rect x="1020" y="370" width="150" height="70" rx="14" fill="#334155"/>
+  <text x="1095" y="412" text-anchor="middle" font-size="22" font-weight="bold" fill="white">提交</text>
+</svg>

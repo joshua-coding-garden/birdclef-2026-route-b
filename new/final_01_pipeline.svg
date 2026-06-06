@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#94A3B8"/>
+    </marker>
+  </defs>
+  <style>text{font-family:"Microsoft JhengHei","PingFang TC",sans-serif}</style>
+
+  <!-- Phase 1 -->
+  <rect x="20" y="70" width="320" height="280" rx="18" fill="#2563EB"/>
+  <text x="180" y="125" text-anchor="middle" font-size="32" font-weight="bold" fill="white">Phase 1</text>
+  <text x="180" y="168" text-anchor="middle" font-size="24" fill="white" fill-opacity="0.95">嵌入提取</text>
+  <line x1="60" y1="190" x2="300" y2="190" stroke="white" stroke-opacity="0.25"/>
+  <text x="180" y="228" text-anchor="middle" font-size="22" fill="white" fill-opacity="0.9">音訊 (.ogg)</text>
+  <text x="180" y="260" text-anchor="middle" font-size="22" fill="white" fill-opacity="0.9">↓ Perch v2 凍結編碼器</text>
+  <text x="180" y="292" text-anchor="middle" font-size="22" fill="white" fill-opacity="0.9">↓ 1536 維嵌入向量</text>
+  <text x="180" y="332" text-anchor="middle" font-size="18" fill="white" fill-opacity="0.55">Kaggle GPU · 47 min</text>
+
+  <!-- Arrow 1→2 -->
+  <line x1="350" y1="210" x2="430" y2="210" stroke="#94A3B8" stroke-width="3" marker-end="url(#arr)"/>
+  <text x="390" y="198" text-anchor="middle" font-size="16" fill="#64748B">嵌入資料</text>
+
+  <!-- Phase 2 -->
+  <rect x="440" y="70" width="320" height="280" rx="18" fill="#059669"/>
+  <text x="600" y="125" text-anchor="middle" font-size="32" font-weight="bold" fill="white">Phase 2</text>
+  <text x="600" y="168" text-anchor="middle" font-size="24" fill="white" fill-opacity="0.95">模型訓練</text>
+  <line x1="480" y1="190" x2="720" y2="190" stroke="white" stroke-opacity="0.25"/>
+  <text x="600" y="228" text-anchor="middle" font-size="22" fill="white" fill-opacity="0.9">5-Fold MLP 分類頭</text>
+  <text x="600" y="260" text-anchor="middle" font-size="22" fill="white" fill-opacity="0.9">+ MixUp 正則化</text>
+  <text x="600" y="292" text-anchor="middle" font-size="22" fill="white" fill-opacity="0.9">+ Pseudo-labeling</text>
+  <text x="600" y="332" text-anchor="middle" font-size="18" fill="white" fill-opacity="0.55">本地 RTX 5070 · 12 min</text>
+
+  <!-- Arrow 2→3 -->
+  <line x1="770" y1="210" x2="850" y2="210" stroke="#94A3B8" stroke-width="3" marker-end="url(#arr)"/>
+  <text x="810" y="198" text-anchor="middle" font-size="16" fill="#64748B">模型權重</text>
+
+  <!-- Phase 3 -->
+  <rect x="860" y="70" width="320" height="280" rx="18" fill="#D97706"/>
+  <text x="1020" y="125" text-anchor="middle" font-size="32" font-weight="bold" fill="white">Phase 3</text>
+  <text x="1020" y="168" text-anchor="middle" font-size="24" fill="white" fill-opacity="0.95">推論提交</text>
+  <line x1="900" y1="190" x2="1140" y2="190" stroke="white" stroke-opacity="0.25"/>
+  <text x="1020" y="228" text-anchor="middle" font-size="22" fill="white" fill-opacity="0.9">測試音訊 → Perch v2</text>
+  <text x="1020" y="260" text-anchor="middle" font-size="22" fill="white" fill-opacity="0.9">→ 5 個 MLP 平均</text>
+  <text x="1020" y="292" text-anchor="middle" font-size="22" fill="white" fill-opacity="0.9">→ 時序平滑 → 提交</text>
+  <text x="1020" y="332" text-anchor="middle" font-size="18" fill="white" fill-opacity="0.55">Kaggle CPU · 15 min</text>
+
+  <!-- Title -->
+  <text x="600" y="42" text-anchor="middle" font-size="30" font-weight="bold" fill="#1E293B">三階段 Pipeline 架構</text>
+</svg>

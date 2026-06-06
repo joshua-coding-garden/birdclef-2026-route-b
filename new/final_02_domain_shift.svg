@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 520">
+  <style>text{font-family:"Microsoft JhengHei","PingFang TC",sans-serif}</style>
+
+  <text x="550" y="42" text-anchor="middle" font-size="30" font-weight="bold" fill="#1E293B">核心問題：Domain Shift（領域偏移）</text>
+
+  <!-- Left: Focal recordings -->
+  <rect x="40" y="70" width="460" height="240" rx="16" fill="#DBEAFE" stroke="#2563EB" stroke-width="2"/>
+  <text x="270" y="115" text-anchor="middle" font-size="26" font-weight="bold" fill="#1E40AF">Focal 錄音（Train Audio）</text>
+  <text x="270" y="155" text-anchor="middle" font-size="22" fill="#1E3A5F">近距離、低噪音</text>
+  <text x="270" y="188" text-anchor="middle" font-size="22" fill="#1E3A5F">單一物種為主</text>
+  <text x="270" y="221" text-anchor="middle" font-size="22" fill="#1E3A5F">錄音品質高</text>
+  <rect x="130" y="255" width="280" height="42" rx="8" fill="#2563EB"/>
+  <text x="270" y="283" text-anchor="middle" font-size="22" font-weight="bold" fill="white">233,101 筆（99.7%）</text>
+
+  <!-- Right: Soundscape recordings -->
+  <rect x="600" y="70" width="460" height="240" rx="16" fill="#FEF3C7" stroke="#D97706" stroke-width="2"/>
+  <text x="830" y="115" text-anchor="middle" font-size="26" font-weight="bold" fill="#92400E">野地錄音（Soundscape）</text>
+  <text x="830" y="155" text-anchor="middle" font-size="22" fill="#78350F">遠距離、高噪音</text>
+  <text x="830" y="188" text-anchor="middle" font-size="22" fill="#78350F">多物種重疊</text>
+  <text x="830" y="221" text-anchor="middle" font-size="22" fill="#78350F">與測試集分布相同</text>
+  <rect x="690" y="255" width="280" height="42" rx="8" fill="#D97706"/>
+  <text x="830" y="283" text-anchor="middle" font-size="22" font-weight="bold" fill="white">739 筆（0.3%）</text>
+
+  <!-- VS -->
+  <circle cx="550" cy="190" r="32" fill="#EF4444"/>
+  <text x="550" y="199" text-anchor="middle" font-size="24" font-weight="bold" fill="white">VS</text>
+
+  <!-- Bottom: Impact -->
+  <rect x="100" y="350" width="900" height="140" rx="16" fill="#FEE2E2" stroke="#EF4444" stroke-width="2"/>
+  <text x="550" y="395" text-anchor="middle" font-size="24" font-weight="bold" fill="#991B1B">結果：模型在 Focal 上表現好，但在 Soundscape 上失準</text>
+  <text x="340" y="440" text-anchor="middle" font-size="28" fill="#1E3A5F">本地驗證 AUC：</text>
+  <text x="535" y="440" text-anchor="middle" font-size="28" font-weight="bold" fill="#059669">0.965</text>
+  <text x="660" y="440" text-anchor="middle" font-size="28" fill="#1E3A5F">→</text>
+  <text x="780" y="440" text-anchor="middle" font-size="28" fill="#1E3A5F">排行榜：</text>
+  <text x="920" y="440" text-anchor="middle" font-size="28" font-weight="bold" fill="#DC2626">0.872</text>
+  <text x="550" y="475" text-anchor="middle" font-size="20" fill="#6B7280">差距 0.093 — 被 Focal 錄音主導，無法泛化到真實野地場景</text>
+</svg>

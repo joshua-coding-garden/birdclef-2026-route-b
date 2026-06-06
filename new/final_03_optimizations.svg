@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600">
+  <style>text{font-family:"Microsoft JhengHei","PingFang TC",sans-serif}</style>
+
+  <text x="600" y="42" text-anchor="middle" font-size="30" font-weight="bold" fill="#1E293B">四大訓練優化策略</text>
+
+  <!-- Box 1: 5-Fold GroupKFold -->
+  <rect x="40" y="75" width="540" height="220" rx="16" fill="#EFF6FF" stroke="#2563EB" stroke-width="2"/>
+  <circle cx="80" cy="115" r="26" fill="#2563EB"/>
+  <text x="80" y="124" text-anchor="middle" font-size="24" font-weight="bold" fill="white">1</text>
+  <text x="120" y="124" font-size="26" font-weight="bold" fill="#1E40AF">5-Fold GroupKFold Ensemble</text>
+  <text x="80" y="165" font-size="22" fill="#334155">將資料切成 5 份，每份訓練一個模型</text>
+  <text x="80" y="198" font-size="22" fill="#334155">同一音檔的所有 frame 保持在同一份</text>
+  <text x="80" y="231" font-size="22" fill="#334155">推論時 5 個模型預測取平均</text>
+  <text x="80" y="270" font-size="20" fill="#059669" font-weight="bold">→ 防止資料洩漏 + 降低變異</text>
+
+  <!-- Box 2: MixUp -->
+  <rect x="620" y="75" width="540" height="220" rx="16" fill="#F0FDF4" stroke="#059669" stroke-width="2"/>
+  <circle cx="660" cy="115" r="26" fill="#059669"/>
+  <text x="660" y="124" text-anchor="middle" font-size="24" font-weight="bold" fill="white">2</text>
+  <text x="700" y="124" font-size="26" font-weight="bold" fill="#065F46">Embedding MixUp</text>
+  <text x="660" y="165" font-size="22" fill="#334155">隨機混合兩筆嵌入向量與標籤</text>
+  <text x="660" y="198" font-size="22" fill="#334155">x' = λx₁ + (1-λ)x₂，λ ~ Beta(0.4)</text>
+  <text x="660" y="231" font-size="22" fill="#334155">讓模型看到更多樣的訓練樣本</text>
+  <text x="660" y="270" font-size="20" fill="#059669" font-weight="bold">→ 正則化，防止過擬合 Focal 錄音</text>
+
+  <!-- Box 3: SC Upweighting -->
+  <rect x="40" y="325" width="540" height="220" rx="16" fill="#FFF7ED" stroke="#D97706" stroke-width="2"/>
+  <circle cx="80" cy="365" r="26" fill="#D97706"/>
+  <text x="80" y="374" text-anchor="middle" font-size="24" font-weight="bold" fill="white">3</text>
+  <text x="120" y="374" font-size="26" font-weight="bold" fill="#92400E">Soundscape 20x 加權</text>
+  <text x="80" y="415" font-size="22" fill="#334155">Soundscape 僅佔訓練集 0.3%</text>
+  <text x="80" y="448" font-size="22" fill="#334155">對 Soundscape 樣本損失乘以 20 倍</text>
+  <text x="80" y="481" font-size="22" fill="#334155">強迫模型重視野地場景表現</text>
+  <text x="80" y="520" font-size="20" fill="#059669" font-weight="bold">→ 直接解決類別不平衡問題</text>
+
+  <!-- Box 4: Pseudo-labeling -->
+  <rect x="620" y="325" width="540" height="220" rx="16" fill="#FAF5FF" stroke="#7C3AED" stroke-width="2"/>
+  <circle cx="660" cy="365" r="26" fill="#7C3AED"/>
+  <text x="660" y="374" text-anchor="middle" font-size="24" font-weight="bold" fill="white">4</text>
+  <text x="700" y="374" font-size="26" font-weight="bold" fill="#5B21B6">Pseudo-labeling（偽標籤）</text>
+  <text x="660" y="415" font-size="22" fill="#334155">用已訓練模型預測未標記 Soundscape</text>
+  <text x="660" y="448" font-size="22" fill="#334155">生成 127,000 筆 soft pseudo-labels</text>
+  <text x="660" y="481" font-size="22" fill="#334155">加入訓練集（僅訓練，不進驗證）</text>
+  <text x="660" y="520" font-size="20" fill="#059669" font-weight="bold">→ 大量增加 Soundscape 領域資料</text>
+</svg>

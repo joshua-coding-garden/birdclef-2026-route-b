@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 500">
+  <style>text{font-family:"Microsoft JhengHei","PingFang TC",sans-serif}</style>
+
+  <text x="550" y="42" text-anchor="middle" font-size="30" font-weight="bold" fill="#1E293B">迭代改進歷程</text>
+
+  <!-- Y-axis labels -->
+  <text x="55" y="105" text-anchor="end" font-size="18" fill="#64748B">0.910</text>
+  <text x="55" y="175" text-anchor="end" font-size="18" fill="#64748B">0.900</text>
+  <text x="55" y="245" text-anchor="end" font-size="18" fill="#64748B">0.890</text>
+  <text x="55" y="315" text-anchor="end" font-size="18" fill="#64748B">0.880</text>
+  <text x="55" y="385" text-anchor="end" font-size="18" fill="#64748B">0.870</text>
+
+  <!-- Grid lines -->
+  <line x1="70" y1="100" x2="1050" y2="100" stroke="#E2E8F0" stroke-width="1"/>
+  <line x1="70" y1="170" x2="1050" y2="170" stroke="#E2E8F0" stroke-width="1"/>
+  <line x1="70" y1="240" x2="1050" y2="240" stroke="#E2E8F0" stroke-width="1"/>
+  <line x1="70" y1="310" x2="1050" y2="310" stroke="#E2E8F0" stroke-width="1"/>
+  <line x1="70" y1="380" x2="1050" y2="380" stroke="#E2E8F0" stroke-width="1"/>
+
+  <!-- Axis -->
+  <line x1="70" y1="80" x2="70" y2="400" stroke="#94A3B8" stroke-width="2"/>
+  <line x1="70" y1="400" x2="1050" y2="400" stroke="#94A3B8" stroke-width="2"/>
+
+  <!-- Bar 1: Baseline 0.872 -->
+  <!-- 0.872 maps to: 400 - (0.872-0.865)*700 = 400 - 49 = 351, height = 400-351=49 -->
+  <!-- Actually let me recalculate: range 0.865 to 0.910 = 0.045, pixel range 400-80=320 -->
+  <!-- 0.872: (0.872-0.865)/0.045 * 320 = 0.007/0.045*320 = 49.8, top = 400-49.8 = 350 -->
+  <rect x="130" y="350" width="140" height="50" rx="6" fill="#94A3B8"/>
+  <text x="200" y="340" text-anchor="middle" font-size="28" font-weight="bold" fill="#334155">0.872</text>
+  <text x="200" y="430" text-anchor="middle" font-size="20" fill="#64748B">V1</text>
+  <text x="200" y="458" text-anchor="middle" font-size="18" fill="#94A3B8">Baseline</text>
+
+  <!-- Bar 2: +5-fold+MixUp 0.873 -->
+  <!-- 0.873: (0.873-0.865)/0.045*320 = 56.9, top = 400-56.9 = 343 -->
+  <rect x="350" y="343" width="140" height="57" rx="6" fill="#2563EB"/>
+  <text x="420" y="333" text-anchor="middle" font-size="28" font-weight="bold" fill="#334155">0.873</text>
+  <text x="420" y="430" text-anchor="middle" font-size="20" fill="#64748B">V2</text>
+  <text x="420" y="458" text-anchor="middle" font-size="18" fill="#2563EB">+5-fold +MixUp</text>
+  <text x="420" y="482" text-anchor="middle" font-size="18" fill="#2563EB">+SC加權</text>
+
+  <!-- Bar 3: +Pseudo-label 0.875 -->
+  <!-- 0.875: (0.875-0.865)/0.045*320 = 71.1, top = 400-71.1 = 329 -->
+  <rect x="570" y="329" width="140" height="71" rx="6" fill="#7C3AED"/>
+  <text x="640" y="319" text-anchor="middle" font-size="28" font-weight="bold" fill="#334155">0.875</text>
+  <text x="640" y="430" text-anchor="middle" font-size="20" fill="#64748B">V6</text>
+  <text x="640" y="458" text-anchor="middle" font-size="18" fill="#7C3AED">+Pseudo-label</text>
+
+  <!-- Bar 4: Final 0.901 -->
+  <!-- 0.901: (0.901-0.865)/0.045*320 = 256, top = 400-256 = 144 -->
+  <rect x="790" y="144" width="180" height="256" rx="6" fill="#059669"/>
+  <text x="880" y="130" text-anchor="middle" font-size="34" font-weight="bold" fill="#059669">0.901</text>
+  <text x="880" y="430" text-anchor="middle" font-size="22" fill="#64748B" font-weight="bold">Final</text>
+  <text x="880" y="458" text-anchor="middle" font-size="18" fill="#059669">Private LB</text>
+
+  <!-- Improvement annotation -->
+  <line x1="200" y1="355" x2="200" y2="155" stroke="#DC2626" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <line x1="200" y1="155" x2="790" y2="155" stroke="#DC2626" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <text x="500" y="145" text-anchor="middle" font-size="22" font-weight="bold" fill="#DC2626">+0.029 提升</text>
+</svg>
