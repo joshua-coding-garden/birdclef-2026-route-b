@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" font-family="'Segoe UI', 'Microsoft JhengHei', sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#4A5568"/>
+    </marker>
+    <marker id="arrP" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#805AD5"/>
+    </marker>
+    <marker id="arrR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#C53030"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="36" text-anchor="middle" font-size="20" font-weight="700" fill="#1A202C">
+    Phase 1 · Perch Embedding Extraction
+  </text>
+  <text x="500" y="58" text-anchor="middle" font-size="12" fill="#718096">
+    Kaggle GPU · perch_v2_gpu (frozen) · 輸出給 Phase 2 linear probe 使用
+  </text>
+
+  <!-- Column headers -->
+  <text x="140" y="92" text-anchor="middle" font-size="12" font-weight="700" fill="#2D3748">INPUT · Kaggle data</text>
+  <text x="500" y="92" text-anchor="middle" font-size="12" font-weight="700" fill="#2D3748">PROCESSING · Python + Perch</text>
+  <text x="860" y="92" text-anchor="middle" font-size="12" font-weight="700" fill="#2D3748">OUTPUT · /kaggle/working/</text>
+
+  <!-- ============ INPUTS ============ -->
+  <!-- Group A: train_audio -->
+  <rect x="30" y="110" width="220" height="92" rx="8" fill="#E6FFFA" stroke="#319795" stroke-width="1.8"/>
+  <text x="140" y="132" text-anchor="middle" font-size="13" font-weight="700" fill="#234E52">A · train_audio</text>
+  <text x="140" y="152" text-anchor="middle" font-size="11" fill="#2D3748">35,549 個短錄音 (.ogg, 32 kHz)</text>
+  <text x="140" y="170" text-anchor="middle" font-size="11" fill="#2D3748">train.csv:primary + secondary</text>
+  <text x="140" y="190" text-anchor="middle" font-size="10" fill="#718096" font-style="italic">~11 GB · 每檔 1 個物種為主</text>
+
+  <!-- Group B: soundscapes -->
+  <rect x="30" y="220" width="220" height="92" rx="8" fill="#E6FFFA" stroke="#319795" stroke-width="1.8"/>
+  <text x="140" y="242" text-anchor="middle" font-size="13" font-weight="700" fill="#234E52">B · train_soundscapes</text>
+  <text x="140" y="262" text-anchor="middle" font-size="11" fill="#2D3748">1,478 個已標註 5s segments</text>
+  <text x="140" y="280" text-anchor="middle" font-size="11" fill="#2D3748">labels.csv:semicolon multi-label</text>
+  <text x="140" y="300" text-anchor="middle" font-size="10" fill="#718096" font-style="italic">可能含多物種同時鳴叫</text>
+
+  <!-- taxonomy -->
+  <rect x="30" y="332" width="220" height="60" rx="8" fill="#E6FFFA" stroke="#319795" stroke-width="1.8"/>
+  <text x="140" y="354" text-anchor="middle" font-size="13" font-weight="700" fill="#234E52">taxonomy.csv</text>
+  <text x="140" y="374" text-anchor="middle" font-size="11" fill="#2D3748">234 species(鳥 162 + 其他 72)</text>
+
+  <!-- ============ PROCESSING ============ -->
+  <!-- Step 1: Preprocess -->
+  <rect x="300" y="110" width="400" height="80" rx="8" fill="#FEFCBF" stroke="#D69E2E" stroke-width="1.8"/>
+  <text x="500" y="132" text-anchor="middle" font-size="13" font-weight="700" fill="#744210">① Preprocess (per-file loop)</text>
+  <text x="500" y="152" text-anchor="middle" font-size="11" fill="#2D3748">read audio · stereo→mono · slice 5-sec frames · pad if &lt;5s</text>
+  <text x="500" y="172" text-anchor="middle" font-size="11" fill="#2D3748">build 234-dim multi-hot labels(primary + secondary)</text>
+
+  <!-- Step 2: Buffer -->
+  <rect x="300" y="210" width="400" height="56" rx="8" fill="#FFF5F5" stroke="#E53E3E" stroke-width="1.8"/>
+  <text x="500" y="232" text-anchor="middle" font-size="13" font-weight="700" fill="#822727">② Batch Buffer (BATCH_SIZE = 32)</text>
+  <text x="500" y="252" text-anchor="middle" font-size="11" fill="#2D3748">固定 shape → XLA 不重編譯 → GPU 吞吐最大化</text>
+
+  <!-- Step 3: Perch -->
+  <rect x="300" y="286" width="400" height="170" rx="10" fill="#FAF5FF" stroke="#805AD5" stroke-width="2.5"/>
+  <text x="500" y="310" text-anchor="middle" font-size="14" font-weight="700" fill="#44337A">③ Perch v2 GPU · FROZEN</text>
+  <text x="500" y="328" text-anchor="middle" font-size="11" fill="#6B46C1">Google pretrained · 10k+ bird species</text>
+  <line x1="320" y1="340" x2="680" y2="340" stroke="#B794F4" stroke-dasharray="3,3" opacity="0.6"/>
+  <text x="500" y="360" text-anchor="middle" font-size="11" fill="#2D3748">audio (B, 160000)</text>
+  <text x="500" y="380" text-anchor="middle" font-size="11" fill="#2D3748">↓ PCEN mel-spectrogram</text>
+  <text x="500" y="400" text-anchor="middle" font-size="11" fill="#2D3748">↓ EfficientNet-style encoder</text>
+  <text x="500" y="420" text-anchor="middle" font-size="12" font-weight="700" fill="#44337A">→ embedding (B, 1536)</text>
+  <text x="500" y="444" text-anchor="middle" font-size="10" fill="#718096" font-style="italic">
+    內建 14,795 類 logits 忽略(Phase 2 會訓練我們自己的 234 類 head)
+  </text>
+
+  <!-- ============ OUTPUTS ============ -->
+  <!-- From A -->
+  <rect x="750" y="110" width="220" height="140" rx="8" fill="#FED7D7" stroke="#C53030" stroke-width="1.8"/>
+  <text x="860" y="132" text-anchor="middle" font-size="13" font-weight="700" fill="#742A2A">A → train_audio_*</text>
+  <rect x="762" y="144" width="196" height="22" rx="3" fill="#FFFFFF" stroke="#FEB2B2"/>
+  <text x="860" y="160" text-anchor="middle" font-size="10" fill="#2D3748">embeddings.npy  (N, 1536)</text>
+  <rect x="762" y="170" width="196" height="22" rx="3" fill="#FFFFFF" stroke="#FEB2B2"/>
+  <text x="860" y="186" text-anchor="middle" font-size="10" fill="#2D3748">labels.npy  (N, 234)</text>
+  <rect x="762" y="196" width="196" height="22" rx="3" fill="#FFFFFF" stroke="#FEB2B2"/>
+  <text x="860" y="212" text-anchor="middle" font-size="10" fill="#2D3748">meta.parquet  filename/frame_idx</text>
+  <text x="860" y="240" text-anchor="middle" font-size="10" fill="#718096" font-style="italic">N ≈ 140,000 frames · ~1.5 GB</text>
+
+  <!-- From B -->
+  <rect x="750" y="270" width="220" height="102" rx="8" fill="#FED7D7" stroke="#C53030" stroke-width="1.8"/>
+  <text x="860" y="292" text-anchor="middle" font-size="13" font-weight="700" fill="#742A2A">B → soundscape_*</text>
+  <rect x="762" y="304" width="196" height="22" rx="3" fill="#FFFFFF" stroke="#FEB2B2"/>
+  <text x="860" y="320" text-anchor="middle" font-size="10" fill="#2D3748">embeddings.npy  (1478, 1536)</text>
+  <rect x="762" y="330" width="196" height="22" rx="3" fill="#FFFFFF" stroke="#FEB2B2"/>
+  <text x="860" y="346" text-anchor="middle" font-size="10" fill="#2D3748">labels.npy  (1478, 234)</text>
+  <text x="860" y="362" text-anchor="middle" font-size="10" fill="#718096" font-style="italic">~11 MB</text>
+
+  <!-- ============ ARROWS ============ -->
+  <!-- Inputs → Process -->
+  <path d="M 250 156 L 297 150" fill="none" stroke="#4A5568" stroke-width="1.5" marker-end="url(#arr)"/>
+  <path d="M 250 266 L 297 160" fill="none" stroke="#4A5568" stroke-width="1.5" marker-end="url(#arr)"/>
+  <path d="M 250 362 L 297 170" fill="none" stroke="#4A5568" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Inside Process: ①→②→③ -->
+  <line x1="500" y1="192" x2="500" y2="207" stroke="#4A5568" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="500" y1="268" x2="500" y2="283" stroke="#805AD5" stroke-width="2" marker-end="url(#arrP)"/>
+
+  <!-- Process → Outputs -->
+  <path d="M 700 420 C 725 420, 725 180, 748 180" fill="none" stroke="#C53030" stroke-width="1.5" marker-end="url(#arrR)"/>
+  <path d="M 700 420 C 725 420, 725 320, 748 320" fill="none" stroke="#C53030" stroke-width="1.5" marker-end="url(#arrR)"/>
+
+  <!-- ============ Footer: Phase roadmap ============ -->
+  <rect x="30" y="480" width="940" height="66" rx="8" fill="#F7FAFC" stroke="#E2E8F0"/>
+  <text x="50" y="504" font-size="11" fill="#4A5568">
+    <tspan font-weight="700" fill="#2D3748">Phase 0</tspan>
+    <tspan fill="#A0AEC0">  local setup </tspan>
+    <tspan fill="#A0AEC0">→</tspan>
+    <tspan font-weight="700" fill="#805AD5"> Phase 1 · 目前</tspan>
+    <tspan fill="#A0AEC0"> Kaggle GPU embedding extract </tspan>
+    <tspan fill="#A0AEC0">→</tspan>
+    <tspan font-weight="700" fill="#2D3748"> Phase 2</tspan>
+    <tspan fill="#A0AEC0"> train Dense(234) linear probe </tspan>
+    <tspan fill="#A0AEC0">→</tspan>
+    <tspan font-weight="700" fill="#2D3748"> Phase 3</tspan>
+    <tspan fill="#A0AEC0"> Kaggle submission (CPU)</tspan>
+  </text>
+  <text x="50" y="528" font-size="10" fill="#718096" font-style="italic">
+    核心概念:Perch backbone 凍結,不訓練。Phase 1 = 純 feature extraction,把音訊壓成 1536-d 向量。
+  </text>
+</svg>

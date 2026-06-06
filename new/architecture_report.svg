@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 900" font-family="'Segoe UI', 'Microsoft JhengHei', 'PingFang TC', sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2D3748"/>
+    </marker>
+    <marker id="arrGray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#A0AEC0"/>
+    </marker>
+    <marker id="arrPurple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#805AD5"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="550" y="40" text-anchor="middle" font-size="22" font-weight="700" fill="#1A202C">
+    方法架構與推理流程
+  </text>
+  <text x="550" y="64" text-anchor="middle" font-size="13" fill="#718096" font-style="italic">
+    Frozen pretrained embedding + lightweight linear probe
+  </text>
+
+  <!-- ================================================== -->
+  <!-- 1. 問題與限制 -->
+  <!-- ================================================== -->
+  <g>
+    <rect x="80" y="92" width="940" height="76" rx="8" fill="#F7FAFC" stroke="#CBD5E0" stroke-width="1.5"/>
+    <text x="100" y="116" font-size="13" font-weight="700" fill="#2D3748">① 任務定位</text>
+    <text x="100" y="138" font-size="12" fill="#4A5568">
+      <tspan>對 5 秒音訊片段預測 234 類物種的存在機率(多標籤),物種分布極度不平衡、且測試場景為野外長時段連續錄音。</tspan>
+    </text>
+    <text x="100" y="156" font-size="12" fill="#4A5568">
+      <tspan>核心困難:標註資料有限、多物種共現、非鳥類(兩棲/昆蟲/哺乳)在開源預訓練模型中覆蓋率低。</tspan>
+    </text>
+  </g>
+
+  <!-- causal arrow -->
+  <line x1="550" y1="170" x2="550" y2="200" stroke="#2D3748" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="562" y="188" font-size="11" fill="#718096" font-style="italic">因此採用</text>
+
+  <!-- ================================================== -->
+  <!-- 2. 設計策略 -->
+  <!-- ================================================== -->
+  <g>
+    <rect x="80" y="206" width="940" height="76" rx="8" fill="#EDF2F7" stroke="#4A5568" stroke-width="1.5"/>
+    <text x="100" y="230" font-size="13" font-weight="700" fill="#2D3748">② 設計策略</text>
+    <text x="100" y="252" font-size="12" fill="#4A5568">
+      <tspan font-weight="700">凍結大規模預訓練 backbone + 訓練輕量線性分類器。</tspan>
+      <tspan>不 fine-tune、不重新訓練特徵提取器。</tspan>
+    </text>
+    <text x="100" y="270" font-size="12" fill="#4A5568">
+      假設:預訓練在 10,000+ 鳥種上的 Perch v2 所產出的 1536 維 embedding 空間,對本任務的 234 類已近乎線性可分。
+    </text>
+  </g>
+
+  <!-- causal arrow -->
+  <line x1="550" y1="284" x2="550" y2="314" stroke="#2D3748" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="562" y="302" font-size="11" fill="#718096" font-style="italic">拆成兩階段</text>
+
+  <!-- ================================================== -->
+  <!-- 3. Pipeline: Training + Inference side-by-side -->
+  <!-- ================================================== -->
+
+  <!-- Left: Training pipeline -->
+  <g>
+    <rect x="60" y="320" width="480" height="400" rx="10" fill="#FFFFFF" stroke="#3182CE" stroke-width="2"/>
+    <rect x="60" y="320" width="480" height="36" rx="10" fill="#3182CE"/>
+    <text x="300" y="344" text-anchor="middle" font-size="14" font-weight="700" fill="#FFFFFF">
+      訓練階段  Training
+    </text>
+
+    <!-- train audio -->
+    <rect x="130" y="380" width="340" height="54" rx="6" fill="#E6FFFA" stroke="#319795"/>
+    <text x="300" y="400" text-anchor="middle" font-size="12" font-weight="700" fill="#234E52">訓練音訊</text>
+    <text x="300" y="420" text-anchor="middle" font-size="10" fill="#4A5568">短錄音(1 物種為主)+ soundscape 已標註段(多物種)</text>
+
+    <line x1="300" y1="436" x2="300" y2="458" stroke="#2D3748" stroke-width="1.6" marker-end="url(#arr)"/>
+
+    <!-- Perch (frozen) -->
+    <rect x="130" y="462" width="340" height="98" rx="8" fill="#FAF5FF" stroke="#805AD5" stroke-width="2.5"/>
+    <text x="300" y="484" text-anchor="middle" font-size="13" font-weight="700" fill="#44337A">Perch v2  ·  FROZEN</text>
+    <text x="300" y="504" text-anchor="middle" font-size="11" fill="#6B46C1">pretrained on 10k+ bird species</text>
+    <line x1="150" y1="515" x2="450" y2="515" stroke="#B794F4" stroke-dasharray="2,2"/>
+    <text x="300" y="533" text-anchor="middle" font-size="11" fill="#2D3748">PCEN mel-spectrogram</text>
+    <text x="300" y="552" text-anchor="middle" font-size="11" fill="#2D3748">→ audio encoder(Conformer-style)</text>
+
+    <line x1="300" y1="562" x2="300" y2="580" stroke="#805AD5" stroke-width="2" marker-end="url(#arrPurple)"/>
+    <text x="310" y="575" font-size="10" fill="#805AD5" font-style="italic">1536-d</text>
+
+    <!-- Linear probe training -->
+    <rect x="130" y="584" width="340" height="74" rx="8" fill="#FFF5F7" stroke="#D53F8C" stroke-width="2"/>
+    <text x="300" y="606" text-anchor="middle" font-size="13" font-weight="700" fill="#702459">Linear Probe · Dense(1536 → 234)</text>
+    <text x="300" y="624" text-anchor="middle" font-size="11" fill="#4A5568">sigmoid + binary cross-entropy</text>
+    <text x="300" y="642" text-anchor="middle" font-size="10" fill="#718096" font-style="italic">(唯一需要訓練的模組,~360k 參數)</text>
+
+    <line x1="300" y1="660" x2="300" y2="682" stroke="#2D3748" stroke-width="1.6" marker-end="url(#arr)"/>
+
+    <rect x="180" y="686" width="240" height="28" rx="4" fill="#FED7D7" stroke="#C53030"/>
+    <text x="300" y="705" text-anchor="middle" font-size="11" font-weight="700" fill="#742A2A">已訓練的 classifier weights</text>
+  </g>
+
+  <!-- Right: Inference pipeline -->
+  <g>
+    <rect x="560" y="320" width="480" height="400" rx="10" fill="#FFFFFF" stroke="#38A169" stroke-width="2"/>
+    <rect x="560" y="320" width="480" height="36" rx="10" fill="#38A169"/>
+    <text x="800" y="344" text-anchor="middle" font-size="14" font-weight="700" fill="#FFFFFF">
+      推論階段  Inference
+    </text>
+
+    <!-- test audio -->
+    <rect x="630" y="380" width="340" height="54" rx="6" fill="#F0FFF4" stroke="#38A169"/>
+    <text x="800" y="400" text-anchor="middle" font-size="12" font-weight="700" fill="#22543D">測試音訊</text>
+    <text x="800" y="420" text-anchor="middle" font-size="10" fill="#4A5568">Pantanal 野外 1 分鐘 soundscape,切 12 段 × 5 秒</text>
+
+    <line x1="800" y1="436" x2="800" y2="458" stroke="#2D3748" stroke-width="1.6" marker-end="url(#arr)"/>
+
+    <!-- Same Perch -->
+    <rect x="630" y="462" width="340" height="98" rx="8" fill="#FAF5FF" stroke="#805AD5" stroke-width="2.5" stroke-dasharray="4,2"/>
+    <text x="800" y="484" text-anchor="middle" font-size="13" font-weight="700" fill="#44337A">同一個 Perch v2  ·  FROZEN</text>
+    <text x="800" y="504" text-anchor="middle" font-size="11" fill="#6B46C1">(權重完全不變,只是換 CPU 編譯變體)</text>
+    <line x1="650" y1="515" x2="950" y2="515" stroke="#B794F4" stroke-dasharray="2,2"/>
+    <text x="800" y="535" text-anchor="middle" font-size="11" fill="#2D3748">相同的特徵空間</text>
+    <text x="800" y="552" text-anchor="middle" font-size="10" fill="#718096" font-style="italic">→ 訓練/測試 embedding 分布一致</text>
+
+    <line x1="800" y1="562" x2="800" y2="580" stroke="#805AD5" stroke-width="2" marker-end="url(#arrPurple)"/>
+    <text x="810" y="575" font-size="10" fill="#805AD5" font-style="italic">1536-d</text>
+
+    <!-- Apply probe -->
+    <rect x="630" y="584" width="340" height="74" rx="8" fill="#FFF5F7" stroke="#D53F8C" stroke-width="2"/>
+    <text x="800" y="606" text-anchor="middle" font-size="13" font-weight="700" fill="#702459">套用訓練好的 Linear Probe</text>
+    <text x="800" y="624" text-anchor="middle" font-size="11" fill="#4A5568">Wx + b → sigmoid → 機率</text>
+    <text x="800" y="642" text-anchor="middle" font-size="10" fill="#718096" font-style="italic">(只做一次矩陣乘法 + 點狀非線性)</text>
+
+    <line x1="800" y1="660" x2="800" y2="682" stroke="#2D3748" stroke-width="1.6" marker-end="url(#arr)"/>
+
+    <rect x="680" y="686" width="240" height="28" rx="4" fill="#FED7D7" stroke="#C53030"/>
+    <text x="800" y="705" text-anchor="middle" font-size="11" font-weight="700" fill="#742A2A">234 類預測機率(每 5 秒段一列)</text>
+  </g>
+
+  <!-- Cross-link: trained weights reused at inference -->
+  <path d="M 420 700 C 500 720, 600 720, 680 700" fill="none" stroke="#C53030" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+  <text x="550" y="716" text-anchor="middle" font-size="10" fill="#C53030" font-style="italic">classifier weights 直接套用</text>
+
+  <!-- ================================================== -->
+  <!-- 4. 為何有效 -->
+  <!-- ================================================== -->
+  <g>
+    <rect x="60" y="750" width="980" height="128" rx="10" fill="#FFFAF0" stroke="#F6AD55" stroke-width="1.5"/>
+    <text x="80" y="776" font-size="14" font-weight="700" fill="#7B341E">③ 為什麼這個架構可行</text>
+
+    <text x="80" y="802" font-size="12" fill="#2D3748">
+      <tspan font-weight="700" fill="#C05621">因果 1.</tspan>
+      <tspan>  Perch 已在 10k+ 鳥種上監督訓練 → embedding 空間**已編碼「這是什麼物種」所需的聲學特徵**,234 類是其子集</tspan>
+    </text>
+    <text x="80" y="824" font-size="12" fill="#2D3748">
+      <tspan font-weight="700" fill="#C05621">因果 2.</tspan>
+      <tspan>  凍結 backbone → 避免在有限標註上過擬合,並讓訓練/測試 embedding 分布嚴格一致</tspan>
+    </text>
+    <text x="80" y="846" font-size="12" fill="#2D3748">
+      <tspan font-weight="700" fill="#C05621">因果 3.</tspan>
+      <tspan>  Linear probe 僅 ~360k 參數 → 在有限資料上統計上合理、訓練快、可重複;複雜 head 反而容易降低泛化</tspan>
+    </text>
+    <text x="80" y="868" font-size="12" fill="#2D3748">
+      <tspan font-weight="700" fill="#C05621">取捨.</tspan>
+      <tspan>  代價:對 Perch 未涵蓋的非鳥類(兩棲/昆蟲/哺乳)預測能力受限,天花板即 Perch 既有表示能力</tspan>
+    </text>
+  </g>
+</svg>
